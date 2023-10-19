@@ -1,0 +1,33 @@
+import express from "express";
+import { PORT, MONGO_URL } from "./config.js";
+import mongoose from "mongoose";
+import { Book } from "./models/bookModel.js";
+import booksRoute from "./routes/booksRoute.js";
+import cors from "cors";
+
+const app = express();
+
+// Middleware for parsing request body
+app.use(express.json());
+
+app.use(cors());
+
+app.get("/", (req, res) => {
+  console.log(res);
+  return res.status(234).send("Welcome to MERN Stack Project!");
+});
+
+app.use("/books", booksRoute);
+
+mongoose
+  .connect(MONGO_URL)
+  .then(() => {
+    console.log("App connected to database!");
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
+app.listen(PORT, () => {
+  console.log(`App is running on port: ${PORT}`);
+});
